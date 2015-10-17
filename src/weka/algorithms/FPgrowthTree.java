@@ -1,19 +1,14 @@
-// Frequent pattern mining using Apriori algorithm
-/*
- * For our test we shall consider 15 students that have attended lectures of the Algorithms and Data
- * Structures course. Each student has attended specific lectures. The ARFF file presented bellow contains
- * information regarding each student¡¯s attendance
- */
 package weka.algorithms;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import weka.associations.Apriori;
+import weka.associations.FPGrowth;
 import weka.core.Instances;
 
-public class AprioriMining {
+
+public class FPgrowthTree {
 
 	public static BufferedReader readDataFile(String filename) {
 		BufferedReader inputReader = null;
@@ -31,6 +26,7 @@ public class AprioriMining {
 		BufferedReader datafile = readDataFile("students_test.txt");
 		Instances data = new Instances(datafile);
 		data.setClassIndex(data.numAttributes() - 1);
+		
 		//Define parameters for Apriori 
 		double deltaValue = 0.05;
 		double lowerBoundMinSupportValue = 0.1;
@@ -38,24 +34,26 @@ public class AprioriMining {
 		int numRulesValue = 20;
 		double upperBoundMinSupportValue = 1.0;
 		//Set up parameters for Apriori
-		String apriori_result;
-		Apriori apriori = new Apriori();
-		apriori.setDelta(deltaValue);
-		apriori.setLowerBoundMinSupport(lowerBoundMinSupportValue);
-		apriori.setNumRules(numRulesValue);
-		apriori.setUpperBoundMinSupport(upperBoundMinSupportValue);
-		apriori.setMinMetric(minMetricValue);
+		String fpgrowth_result;
+		FPGrowth fpgrowth = new FPGrowth();
+		fpgrowth.setDelta(deltaValue);
+		fpgrowth.setLowerBoundMinSupport(lowerBoundMinSupportValue);
+		fpgrowth.setNumRulesToFind(numRulesValue);
+		fpgrowth.setUpperBoundMinSupport(upperBoundMinSupportValue);
+		fpgrowth.setMinMetric(minMetricValue);
+		String[] fpoptions = new String[] {"-N", "7"};
+		fpgrowth.setOptions(fpoptions);
 		
 		try
 		{
-			apriori.buildAssociations(data);
+			fpgrowth.buildAssociations(data);
 
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		apriori_result = apriori.toString();
+		fpgrowth_result = fpgrowth.toString();
 
-		System.out.println(apriori_result);
+		System.out.println(fpgrowth_result);
 	}
 }
